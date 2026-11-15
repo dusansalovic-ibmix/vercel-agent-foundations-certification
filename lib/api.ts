@@ -382,6 +382,13 @@ export async function createReturn(input: CreateReturnInput): Promise<Return> {
   });
 }
 
+/** Polling fallback for a return's status when the decision callback never arrives. */
+export async function getReturn(id: string): Promise<Return> {
+  return request<Return>(`/returns/${encodeURIComponent(id)}`, {
+    cache: "no-store",
+  });
+}
+
 export async function notifyReturnInProcess(orderId: string): Promise<void> {
   // In production this would hit your email provider.
   console.log(

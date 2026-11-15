@@ -14,6 +14,14 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Admin agent API: answer with 401 instead of redirecting to the login page.
+  if (pathname.startsWith("/api/admin")) {
+    return NextResponse.json(
+      { error: "Admin sign-in required." },
+      { status: 401 },
+    );
+  }
+
   const url = request.nextUrl.clone();
   url.pathname = "/admin/login";
   url.search = "";
@@ -21,5 +29,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  // Workflow's internal /.well-known/workflow/* routes are intentionally not
+  // matched, so the proxy never intercepts durable run execution.
+  matcher: ["/admin/:path*", "/api/admin/:path*"],
 };

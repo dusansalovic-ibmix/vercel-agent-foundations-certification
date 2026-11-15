@@ -3,6 +3,7 @@ export type OrderStatus =
   | "paid"
   | "shipped"
   | "delivered"
+  | "fulfilled"
   | "cancelled";
 export type ReturnStatus = "pending" | "approved" | "rejected" | "processed";
 export type ReturnDecision = "approved" | "rejected" | null;
@@ -123,6 +124,8 @@ export interface OrderItem {
   quantity: number;
   unitPrice: number;
   lineTotal: number;
+  /** The API hydrates each order line with its product. */
+  product?: Product;
 }
 
 export interface Order {
